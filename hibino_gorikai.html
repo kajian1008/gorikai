@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>音声プレイリスト</title>
+  <title>御理解リスト</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #d9d6c9; /* 薄いカーキ色 */
+      background-color: #d9d6c9;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      min-height: 100vh;
       color: #333;
     }
     .container {
@@ -25,6 +25,8 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
       width: 90%;
       max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
       transition: transform 0.3s, box-shadow 0.3s;
     }
     .container:hover {
@@ -53,18 +55,20 @@
       transition: background-color 0.3s, transform 0.2s;
       font-size: 1.1em;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
     .playlist li:hover {
       background-color: #e0e0e0;
       transform: translateY(-2px);
     }
     iframe {
-      margin-top: 20px;
       width: 100%;
       height: 100px;
       border: none;
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
@@ -104,7 +108,18 @@
     playlistItems.forEach(item => {
       item.addEventListener('click', () => {
         const audioFile = item.getAttribute('data-audio');
+
+        // 音声URLをセット
         audioPlayer.src = audioFile;
+        audioPlayer.style.display = "block";
+
+        // すでにプレイヤーがある場合、一旦削除
+        if (audioPlayer.parentNode) {
+          audioPlayer.parentNode.removeChild(audioPlayer);
+        }
+
+        // クリックしたリストアイテムの直後にプレイヤーを挿入
+        item.after(audioPlayer);
       });
     });
   </script>
